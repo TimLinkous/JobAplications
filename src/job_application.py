@@ -25,3 +25,6 @@ class JobApplication:
 
     def update_status(self, status):
         self.status = status
+
+    def update_contact_info(self, name, phone, email):
+        self.contact_info[name] = {'name': name, 'phone': phone, 'email': email}
