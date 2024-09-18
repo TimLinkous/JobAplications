@@ -14,13 +14,25 @@ class GoogleSheetsManager:
         self.sheet = self.service.spreadsheets()
 
     def read_sheet(self, range_name: str) -> List[List]:
-        pass
+        try:
+            result = self.sheet.values().get(spreadsheet_ID=self.spreadsheet_id, range = range_name).execute()
+            return result.get('values', [])
+        except HttpError as error:
+            print(f"An error occurred: {error}")
+            return []
 
     def write_sheet(self, range_name: str, values: List[List]):
         pass
 
     def append_sheet(self, range_name: str, values: List[List]):
-        pass
+        try:
+            body = {'values': values}
+            result = self.sheet.values().update(
+                spreadsheet_ID=self.spreadsheet_id, range=range_name,
+                valueInputOption='USER_ENTERED', body=body).execute()
+            print(f"{result.get('updatedCells')} cells updated")
+        except HttpError as error:
+            print(f"An error occurred: {error}")
 
     def clear_sheet(self, range_name: str):
         pass
