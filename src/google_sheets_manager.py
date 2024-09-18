@@ -8,7 +8,10 @@ from job_application import JobApplication
 
 class GoogleSheetsManager:
     def __init__(self, credentials_path: str, spreadsheet_id: str):
-        pass
+        self.spreadsheet_id = spreadsheet_id
+        self.credentials = service_account.Credentials.from_serice_account_file(credentials_path, scopes = ['https://www.googleapis.com/auth/spreadsheets'])
+        self.service = build('sheets', 'v4', credentials=self.credentials)
+        self.sheet = self.service.spreadsheets()
 
     def read_sheet(self, range_name: str) -> List[List]:
         pass
