@@ -22,9 +22,6 @@ class GoogleSheetsManager:
             return []
 
     def write_sheet(self, range_name: str, values: List[List]):
-        pass
-
-    def append_sheet(self, range_name: str, values: List[List]):
         try:
             body = {'values': values}
             result = self.sheet.values().update(
@@ -34,8 +31,23 @@ class GoogleSheetsManager:
         except HttpError as error:
             print(f"An error occurred: {error}")
 
+    def append_sheet(self, range_name: str, values: List[List]):
+        try:
+            body = {'values': values}
+            result = self.sheet.values().append(
+                spreadsheet_ID=self.spreadsheet_id, range=range_name,
+                valueInputOption='USER_ENTERED', body=body).execute()
+            print(f"{result.get('updates').get('updatedCells')} cells appended")
+        except HttpError as error:
+            print(f"An error occurred: {error}")
+            
+
     def clear_sheet(self, range_name: str):
-        pass
+        try:
+            self.sheet.values().clear(spreadsheet_ID=self.spreadsheet_id, range=range_name).execute()
+            print(f"Range {range_name} cleared.")
+        except HttpError as error:
+            print(f"An error occurred: {error}")
 
     def job_application_to_row(self, job: JobApplication) -> List:
         pass
