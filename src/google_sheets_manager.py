@@ -62,15 +62,15 @@ class GoogleSheetsManager:
         ]
 
     def row_to_job_application(self, row: List) -> JobApplication:
-        job = JobApplication(*row[:9])  # first 9 elements
-        job.follow_up_dates = [date.fromisoformat(d.strip()) for d in row[9].split(',')] if row[9] else[]
-        job.last_activity = date.fromisoformat(row[10] if row[10] else None)
-        job.contact_info = ast.literal_eval(row[11]) if row[11] else {}
-        job.interview_info = eval(row[12]) if row[12] else {}
-        job.salary_info = eval(row[13]) if row[13] else {}
-        job.documents = eval(row[14]) if row[14] else {}
+        job = JobApplication(*row[1:10])  # first 9 elements
+        job.job_req_number = row[0]
+        job.follow_up_dates = [date.fromisoformat(d.strip()) for d in row[10].split(',')] if row[10] else[]
+        job.last_activity = date.fromisoformat(row[11] if row[11] else None)
+        job.contact_info = ast.literal_eval(row[12]) if row[12] else {}
+        job.interview_info = eval(row[13]) if row[13] else {}
+        job.salary_info = eval(row[14]) if row[14] else {}
+        job.documents = eval(row[15]) if row[15] else {}
         return job
-
 
     def sync_job_applications(self, jobs: List[JobApplication]):
         pass
