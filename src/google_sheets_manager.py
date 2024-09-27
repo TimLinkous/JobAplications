@@ -73,7 +73,11 @@ class GoogleSheetsManager:
         return job
 
     def sync_job_applications(self, jobs: List[JobApplication]):
-        pass
+        header = ['Job Req #', 'Title', 'Company', 'URL', 'Location', 'Job Type', 'Date Applied', 'Deadline', 'Description', 'Status', 'Follow-up Dates', 'Last Activity', 'Contact Info', 'Interview Info', 'Salary Info', "Documents"]
+        values = [header] + [self.job_application_to_row(job) for job in jobs]
+        self.clear_sheet('A1:P')
+        self.write_sheet('A1:P', values)
 
     def get_job_applications(self) -> List[JobApplication]:
-        pass
+        data = self.read_sheet('A2:P')
+        return [self.row_to_job_application(row) for row in data]
