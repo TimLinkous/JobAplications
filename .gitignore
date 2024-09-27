@@ -2,6 +2,7 @@
 *credentials*.json
 *.pem
 *.key
+/Users/timl/python practice/Job Application Tracking/credentials/sheets_api_credentials.json
 
 # Python
 __pycache__/
@@ -29,6 +30,7 @@ wheels/
 venv/
 env/
 ENV/
+.env
 
 # IDEs
 .vscode/

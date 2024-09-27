@@ -1,16 +1,22 @@
 import os
-from google.oauth2.credentials import Credentials
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 from typing import List, Dict
 from job_application import JobApplication
+from datetime import date, datetime
 import ast
+from dotenv import load_dotenv
+
+load_dotenv()
+
+credentials_path = os.getenv("GOOGLE_CREDENTIALS_PATH")
+spreadsheet_id = os.getenv("GOOGLE_SPREADSHEET_ID")
 
 class GoogleSheetsManager:
     def __init__(self, credentials_path: str, spreadsheet_id: str):
         self.spreadsheet_id = spreadsheet_id
-        self.credentials = service_account.Credentials.from_serice_account_file(credentials_path, scopes = ['https://www.googleapis.com/auth/spreadsheets'])
+        self.credentials = service_account.Credentials.from_service_account_file(credentials_path, scopes = ['https://www.googleapis.com/auth/spreadsheets'])
         self.service = build('sheets', 'v4', credentials=self.credentials)
         self.sheet = self.service.spreadsheets()
 
@@ -31,6 +37,7 @@ class GoogleSheetsManager:
             print(f"{result.get('updatedCells')} cells updated")
         except HttpError as error:
             print(f"An error occurred: {error}")
+            
 
     def append_sheet(self, range_name: str, values: List[List]):
         try:
@@ -81,3 +88,5 @@ class GoogleSheetsManager:
     def get_job_applications(self) -> List[JobApplication]:
         data = self.read_sheet('A2:P')
         return [self.row_to_job_application(row) for row in data]
+    
+sheets_manager = GoogleSheetsManager(credentials_path, spreadsheet_id)
