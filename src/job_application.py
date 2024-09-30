@@ -3,9 +3,10 @@ from datetime import date
 from typing import List, Optional
 
 class JobApplication:
-    def __init__(self, title, company, url, location, job_type, date_applied, deadline, description, status):
+    def __init__(self, title, company, job_req, url, location, job_type, date_applied, deadline, description, status):
         self.title = title
         self.company = company
+        self.job_req = job_req
         self.url = url
         self.location = location
         self.job_type = job_type
