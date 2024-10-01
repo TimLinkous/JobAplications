@@ -14,15 +14,15 @@ credentials_path = os.getenv("GOOGLE_CREDENTIALS_PATH")
 spreadsheet_id = os.getenv("GOOGLE_SPREADSHEET_ID")
 
 class GoogleSheetsManager:
-    def __init__(self, credentials_path: str, spreadsheetId: str):
-        self.spreadsheetId = spreadsheetId
+    def __init__(self, credentials_path: str, spreadsheet_id: str):
+        self.spreadsheet_id = spreadsheet_id
         self.credentials = service_account.Credentials.from_service_account_file(credentials_path, scopes = ['https://www.googleapis.com/auth/spreadsheets'])
         self.service = build('sheets', 'v4', credentials=self.credentials)
         self.sheet = self.service.spreadsheets()
 
     def read_sheet(self, range_name: str) -> List[List]:
         try:
-            result = self.sheet.values().get(spreadsheetId=self.spreadsheetId, range = range_name).execute()
+            result = self.sheet.values().get(spreadsheetId=self.spreadsheet_id, range = range_name).execute()
             return result.get('values', [])
         except HttpError as error:
             print(f"An error occurred: {error}")
@@ -32,7 +32,7 @@ class GoogleSheetsManager:
         try:
             body = {'values': values}
             result = self.sheet.values().update(
-                spreadsheetId=self.spreadsheetId, range=range_name,
+                spreadsheetId=self.spreadsheet_id, range=range_name,
                 valueInputOption='USER_ENTERED', body=body).execute()
             print(f"{result.get('updatedCells')} cells updated")
         except HttpError as error:
@@ -43,7 +43,7 @@ class GoogleSheetsManager:
         try:
             body = {'values': values}
             result = self.sheet.values().append(
-                spreadsheetId=self.spreadsheetId, range=range_name,
+                spreadsheetId=self.spreadsheet_id, range=range_name,
                 valueInputOption='USER_ENTERED', body=body).execute()
             print(f"{result.get('updates').get('updatedCells')} cells appended")
         except HttpError as error:
@@ -51,7 +51,7 @@ class GoogleSheetsManager:
             
     def clear_sheet(self, range_name: str):
         try:
-            self.sheet.values().clear(spreadsheetId=self.spreadsheetId, range=range_name).execute()
+            self.sheet.values().clear(spreadsheetId=self.spreadsheet_id, range=range_name).execute()
             print(f"Range {range_name} cleared.")
         except HttpError as error:
             print(f"An error occurred: {error}")
