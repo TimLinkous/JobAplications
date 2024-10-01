@@ -1,6 +1,6 @@
 import os
 from dotenv import load_dotenv  
-from google_sheets_manager import GoogleSheetsManager
+from google_sheets_manager import GoogleSheetsManager, clean_spreadsheet_id
 from data_manager import DataManager
 from job_application import JobApplication
 
@@ -8,7 +8,13 @@ def main():
     load_dotenv()
 
     credentials_path = os.getenv("GOOGLE_CREDENTIALS_PATH")
-    spreadsheet_id = os.getenv("GOOGLE_SPREADSHEET_ID")
+    spreadsheet_id = clean_spreadsheet_id(os.getenv("GOOGLE_SPREADSHEET_ID", ""))
+    
+    # Remove any potential angle brackets from the spreadsheet_id
+    spreadsheet_id = spreadsheet_id.strip('<>')
+
+    print(f"Credentials path: {credentials_path}")
+    print(f"Spreadsheet ID: {spreadsheet_id}")
 
     sheets_manager = GoogleSheetsManager(credentials_path, spreadsheet_id)
     data_manager = DataManager(sheets_manager)
