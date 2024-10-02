@@ -12,6 +12,7 @@ def main():
     
     # Remove any potential angle brackets from the spreadsheet_id
     spreadsheet_id = spreadsheet_id.strip('<>')
+    print(f"Raw spreadsheet ID from env: {spreadsheet_id}")
 
     print(f"Credentials path: {credentials_path}")
     print(f"Spreadsheet ID: {spreadsheet_id}")
